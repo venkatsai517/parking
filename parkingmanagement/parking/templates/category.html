@@ -1,0 +1,338 @@
+{% extends 'base.html' %}
+{% block title %}
+
+<title>Category</title>
+
+{% endblock %}
+
+{% block content %}
+
+    <!-- nav bar heading start -->
+    <div class="sticky-top">
+      {% include 'navbar.html' %}
+      <!-- niv bar heading end -->
+      <!-- side bar start -->
+      <div class="d-flex flex-row">
+        {% include 'sidebar.html' %}
+        <!-- side bar end -->
+      <!--add category start-->
+        <div class="container">
+          <div class="row g-2 mt-2 ms-2">
+            <div class="col-7 border border-light-subtle p-3">
+              <!-- As a heading -->
+              <nav class="navbar bg-body-tertiary">
+                <div class="container-fluid">
+                  <span class="navbar-brand mb-0 h1"
+                    ><i class="bi bi-list-check"></i>Add Category</span
+                  >
+                </div>
+              </nav>
+              <form class="row g-3" action="{% url 'add_category' %}" method="post">
+                {% csrf_token %}
+                <div class="col-md-6">
+                  <label for="parkingAreaNumber" class="form-label"
+                    >Parking Area Number</label
+                  >
+                  <input type="text" class="form-control" name="parkingAreaNumber" required />
+                </div>
+                <div class="col-md-6">
+                  <label for="vehicleType" class="form-label"
+                    >Vehicle Type</label>
+                  <input type="text" class="form-control" name="vehicleType" />
+                </div>
+                <div class="col-12">
+                  <label for="vehicleLimit" class="form-label">Vehicle Limit</label>
+                  <input type="text" class="form-control" name="vehicleLimit" />
+                </div>
+                <div class="col-12">
+                  <label for="parkingCharge" class="form-label"
+                    >Parking Charge</label
+                  >
+                  <input type="text" class="form-control" name="parkingCharge"/>
+                </div>
+
+                <div class="col-12 d-grid gap-2">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </form>
+            </div>
+            <!-- add category end here -->
+            &nbsp;
+            &nbsp;
+            <!-- detail start here -->
+            <div class="col-4 border border-light-subtle p-3 column-gap-3">
+              <nav class="navbar bg-body-tertiary">
+                <div class="container-fluid">
+                  <span class="navbar-brand mb-0 h1"
+                    ><i class="bi bi-info-circle"></i>Details</span
+                  >
+                </div>
+              </nav>
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Car
+                  <span >$ 4.00</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Motorcycle
+                  <span >$ 2.00</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                 Mini Van
+                  <span >$ 5.00</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  PickUp Van
+                   <span >$ 5.00</span>
+                 </li>
+                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Minibus
+                   <span >$ 6.00</span>
+                 </li>
+                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Car Type 101
+                   <span >$ 7.00</span>
+                 </li>
+              </ul>
+            </div>
+            <!-- deatail end here -->
+            <!--manage category start-->
+            <div class="row mt-3">
+        <div class="col-12 border border-light-subtle p-3">
+          <div class="manage-category-div">
+            <div class="manage-category-head">
+              <i class="fa-solid fa-list"></i> Manage Category
+            </div>
+            <div class="manage-show-search">
+              <div class="show">
+                Show
+                <span class="show-input"
+                  ><input value="10" type="number"
+                /></span>
+              </div>
+              <div class="search-input float-end">
+                <form action="{% url 'category' %}" method="get">
+                <div class="input-group mb-3  ">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="search"
+                    placeholder="Search"
+                    aria-describedby="search-icon"
+                    value="{{search_query}}"
+                  />
+
+                  <button
+                    type="submit"
+                    href=""
+                    class="input-group-text btn btn-primary"
+                  >
+                    search
+                  </button>
+                </div>
+              </form>
+              </div>
+            </div>
+            <div class="container ">
+              <table class="table table-bordered table-striped text-center">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Area Number</th>
+                    <th scope="col">Vehicle Type</th>
+                    <th scope="col">Vehicle Limit</th>
+                    <th scope="col">Charge</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for category in category_data %}
+                  <tr>
+                    <th>{{forloop.counter}}</th>
+                    <td>{{category.parking_area_no}}</td>
+                    <td>{{category.vehicle_type}}</td>
+                    <td>{{category.vehicle_limit}}</td>
+                    <td>{{category.parking_charge}}</td>
+                    <td class="{{category.status}} badge text-bg-success m-3" >{{category.status}}</td>
+                    <td>
+                      {% if category.status == 'activated' %}
+                      <a
+                        href="{% url 'deactivate_category' category.id %}"
+                        class="btn btn-danger"
+                        >Deactivate</a
+                      >
+                      {% else %}
+
+
+                      <a
+                        href="{% url 'activate_category' category.id %}"
+                        class="btn btn-success"
+                        >Activate</a
+                      >
+                      {% endif %}
+
+                       <a
+                        class="btn btn-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#exampleModal"
+                        onclick="save('{{category.id}}','{{category.parking_area_no}}','{{category.vehicle_type}}','{{category.vehicle_limit}}','{{category.parking_charge}}')"
+                        >Edit
+                      </a>
+                      <a
+                        href="{% url 'delete_category' category.id %}"
+                        class="btn btn-danger"
+                        >Del</a
+                      >
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <!--manage category end-->
+              <!-- pagination -->
+
+              {% include 'pagination.html' %}
+                <!-- pagination end here -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+      </div>
+    </div>
+<div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Modal title
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <!-- modal content start here -->
+              <div class="container">
+                <form method="post" action="{% url 'edit_category' %}">
+                  {% csrf_token %}
+                  <div class="row mb-3">
+                    <div class="col-6">
+                      <label for="parkingAreaNumber" class="form-label"
+                        >Parking Area Number</label
+                      >
+                      <input
+                        type="text"
+                        name="parkingAreaNumber"
+                        class="form-control"
+                        id="parkingAreaNumber"
+                        value=""
+                        required
+                      />
+                    </div>
+                    <div class="col-6">
+                      <label for="parkingAreaNumber" class="form-label"
+                        >Vehicle Type</label
+                      >
+                      <input
+                        type="text"
+                        name="vehicleType"
+                        class="form-control"
+                        id="vehicleType"
+                        value=""
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label for="vehicleLimit" class="form-label"
+                        >Vehicle Limit</label
+                      >
+                      <input
+                        type="text"
+                        name="vehicleLimit"
+                        class="form-control"
+                        id="vehicleLimit"
+                        value=""
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label for="parkingCharge" class="form-label"
+                        >Parking Charge</label
+                      >
+                      <input
+                        type="text"
+                        name="parkingCharge"
+                        class="form-control"
+                        id="parkingCharge"
+                        value=""
+                        required
+                      />
+                      <input
+                        type="number"
+                        name="id"
+                        id="id"
+                        style="display: none"
+                        value=""
+                      />
+                    </div>
+                  </div>
+                  <div class="row p-2">
+                    <button type="submit" class="btn btn-primary">
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <!-- modal content end here -->
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+  <script>
+        function save(id, pan, vt, vl, pc) {
+          var parkingAreaNumber = document.getElementById("parkingAreaNumber");
+          var vehicleType = document.getElementById("vehicleType");
+          var vehicleLimit = document.getElementById("vehicleLimit");
+          var parkingCharge = document.getElementById("parkingCharge");
+          var ids = document.getElementById("id");
+          parkingAreaNumber.value = pan;
+          vehicleType.value = vt;
+          vehicleLimit.value = vl;
+          parkingCharge.value = pc;
+          ids.value = id;
+        }
+        function navigate() {
+          var editUrl = "edit_category/" + idn + "/";
+          window.location.href = editUrl;
+        }
+  </script>
+{% endblock %}

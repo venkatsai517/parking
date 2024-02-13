@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}
+
+<title>Category</title>
+
+{% endblock %} {% load static %} <!-- block for css end here -->
+
+{% block content %}
+<div class="sticky-top">
+      {% include 'navbar.html' %}
+      <!-- niv bar heading end -->
+      <!-- side bar start -->
+      <div class="d-flex flex-row">
+        {% include 'sidebar.html' %}
+
+
+                <div class="container" id="userform">
+                          <div class="row g-2">
+                            <div class="col-12 p-4">
+                              <div class="border bg-light">
+                                <nav class="navbar navbar-light bg-light">
+                                <div class="container-fluid">
+                                  <a class="navbar-brand" href="#"><i class="bi bi-gear-fill"></i> Change Your Password</a>
+                                </div>
+
+                              </nav>
+                            </div>
+                                <form action="{% url 'change_password' %}" method="post">
+                                {% csrf_token %}
+
+                                    <div class="mb-3">
+                                      <label for="formGroupExampleInput" class="form-label">Current Password</label>
+                                      <input type="text" class="form-control" id="formGroupExampleInput" placeholder="" name="currentPassword">
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="formGroupExampleInput2" class="form-label">New Password</label>
+                                      <input type="text" class="form-control" id="" placeholder="" name="newPassword">
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="formGroupExampleInput2" class="form-label">Re-enter Password</label>
+                                      <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="" name="rePassword">
+                                    </div>
+                                    <div>
+                                      <button type="submit" class="btn btn-primary col-12 rounded-pill">Change Password</button>
+                                    </div>
+                                </form>
+                            </div>
+                          </div>
+                </div>
+      </div>
+</div>
+
+{% endblock %}

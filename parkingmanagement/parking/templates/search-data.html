@@ -1,0 +1,64 @@
+{% extends 'base.html' %} <br />
+{% block title %}
+
+<title>Search Data</title>
+
+{% endblock %}
+{% block content %}<!-- this is content -->
+<div class="sticky-top">
+{% include 'navbar.html' %}<!-- this is navbar -->
+  <div class="d-flex flex-row">
+    {% include 'sidebar.html' %}
+    <!-- search dta start here -->
+      <div class="container" id="userform">
+          <div class="row g-2">
+            <div class="col-12 p-2">
+              <div class="border bg-light">
+                <nav class="navbar navbar-light bg-light">
+                <div class="container-fluid">
+                  <a class="navbar-brand" href="#"><i class="bi bi-search"></i>Search Data | Only the record of the last 30 days are available here</a>
+                </div>
+              </nav>
+            </div>
+            <nav class="navbar navbar-light bg-light">
+              <div class="container-fluid">
+                <form class="d-flex col-12 ps-5" action="{% url 'search_data' %}" method="get">
+                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" value="{{search_query}}" name="search">
+                  <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
+                </form>
+              </div>
+            </nav>
+            <table class="table table-bordered p-2">
+              <thead  class="table-active">
+              <th>#</th>
+              <th>Vehicle Number</th>
+              <th>Type</th>
+              <th>Area</th>
+              <th>Charge</th>
+              <th>Arrival Time</th>
+              <th>Status</th>
+              </thead>
+              <tbody>
+                {% for vehicle in vehicle_data %}
+                  <tr>
+                    <th>{{vehicle.id}}</th>
+                    <td>{{vehicle.vehicle_no}}</td>
+                    <td>{{vehicle.vehicle_type}}</td>
+                    <td>{{vehicle.parking_area_no}}</td>
+                    <td>
+                      <span class="charge">$</span>{{vehicle.parking_charge}}
+                    </td>
+                    <td>{{vehicle.arrival_time}}</td>
+                     <td class="{vehicle.status}} badge text-bg-success m-3">{{vehicle.status}}</td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+        <!-- search data end here -->
+      </div>
+    </div>
+  {% endblock %}

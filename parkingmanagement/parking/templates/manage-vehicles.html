@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block title %}
+
+<title>Category</title>
+
+{% endblock %} {% load static %} <!-- block for css end here -->
+
+{% block content %}
+<div class="sticky-top">
+  {% include 'navbar.html' %}
+  <div class="d-flex flex-row">
+        {% include 'sidebar.html' %}
+
+      <div class="container">
+                <div class="row g-2">
+                  <div class="col-12">
+                    <nav class="navbar bg-body-tertiary">
+                      <div class="container-fluid ps-0">
+                        <span class="navbar-brand"
+                          ><i class="bi bi-list-check"></i>Manage Vehicle | Only the records of the last 30 days are available here</span
+                        >
+                      </div>
+                    </nav>
+                  </div>
+                  <div class="manage-show-search">
+              <div class="show">
+                Show
+                <span class="show-input"
+                  ><input value="10" type="number"
+                /></span>
+                entries
+              </div>
+                      <div class="search-input">
+                        <form action="{% url 'manage_vehicles' %}" method="get">
+                          <div class="input-group">
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="search"
+                              placeholder="Search"
+                              aria-describedby="search-icon"
+                              value="{{search_query}}"
+                            />
+
+                            <button
+                              type="submit"
+                              href=""
+                              class="input-group-text btn btn-primary"
+                            >
+                              search
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  <div class="container">
+                    <table
+                      id="example"
+                      class="table table-striped table-bordered"
+                      style="width: 100%"
+                    >
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Vehicle Number</th>
+                          <th>Type</th>
+                          <th>Area No</th>
+                          <th>Charge</th>
+                          <th>Arrival Time</th>
+                          <th>Status</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for vehicle in vehicle_data %}
+                        <th>{{forloop.counter}}</th>
+                            <td>{{vehicle.vehicle_no}}</td>
+                            <td>{{vehicle.vehicle_type}}</td>
+                            <td>{{vehicle.parking_area_no}}</td>
+                            <td>
+                              <span class="charge">$ </span> {{vehicle.parking_charge}}
+                            </td>
+                            <td>{{vehicle.arrival_time}}</td>
+                            <td
+                              style="font-weight: 700"
+                              class="{{
+                              {% if vehicle.status == 'leaved' %}
+                              text-danger
+
+                              {% elif vehicle.status == 'parked' %}
+                              badge text-bg-success m-3
+                              {% endif %}
+                              "
+                            >
+                              {{vehicle.status}}
+                            </td>
+                            <td>
+                              <a
+                                href="{%  url 'change_status_manage_vehicle' vehicle.id %}"
+                                class="btn {% if vehicle.status == 'parked' %} btn-primary {% elif vehicle.status == 'leaved' %} btn-secondary {% endif %}"
+                                >Done</a
+                              >
+                            </td>
+                          </tr>
+                      {% endfor %}
+
+
+                      </tbody>
+
+                    </table>
+                  </div>
+                </div>
+              </div>
+  </div>
+</div>
+{% endblock %}
